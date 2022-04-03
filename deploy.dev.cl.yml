@@ -1,6 +1,6 @@
 version: "0.1"
 
-namespace: spryker_b2b_dev
+namespace: spryker_b2c_dev
 tag: 'dev'
 
 environment: docker.dev
@@ -79,19 +79,37 @@ groups:
                         store: DE
                     glue.at.spryker.local:
                         store: AT
-            zed_eu:
-                application: zed
+            backoffice_eu:
+                application: backoffice
                 endpoints:
-                    zed.de.spryker.local:
+                    backoffice.de.spryker.local:
                         store: DE
                         services:
                             session:
                                 namespace: 3
-                    zed.at.spryker.local:
+                    backoffice.at.spryker.local:
                         store: AT
                         services:
                             session:
                                 namespace: 4
+            backend_gateway_eu:
+                application: backend-gateway
+                endpoints:
+                    backend-gateway.de.spryker.local:
+                        store: DE
+                        primal: true
+                    backend-gateway.at.spryker.local:
+                        store: AT
+                        primal: true
+            backend_api_eu:
+                application: zed
+                endpoints:
+                    backend-api.de.spryker.local:
+                        store: DE
+                        entry-point: BackendApi
+                    backend-api.at.spryker.local:
+                        store: AT
+                        entry-point: BackendApi
     US:
         region: US
         applications:
@@ -108,22 +126,33 @@ groups:
                 endpoints:
                     glue.us.spryker.local:
                         store: US
-            zed_us:
-                application: zed
+            backoffice_us:
+                application: backoffice
                 endpoints:
-                    zed.us.spryker.local:
+                    backoffice.us.spryker.local:
                         store: US
                         services:
                             session:
                                 namespace: 6
+            backend_gateway_us:
+                application: backend-gateway
+                endpoints:
+                    backend-gateway.us.spryker.local:
+                        store: US
+            backend_api_us:
+                application: zed
+                endpoints:
+                    backend-api.us.spryker.local:
+                        store: US
 services:
     database:
-        engine: postgres
+        engine: mysql
+        version: mariadb-10.4
         root:
             username: "root"
             password: "secret"
         endpoints:
-            localhost:5432:
+            localhost:3306:
                 protocol: tcp
     broker:
         engine: rabbitmq
@@ -143,7 +172,7 @@ services:
                 protocol: tcp
     search:
         engine: elastic
-        version: 6.8
+        version: 7.6
         endpoints:
             localhost:9200:
                 protocol: tcp
@@ -163,10 +192,23 @@ services:
         engine: redis-commander
         endpoints:
             redis-commander.spryker.local:
+    kibana:
+        engine: kibana
+        version: 7.6
+        endpoints:
+            kibana.spryker.local:
+    blackfire:
+        engine: blackfire
+        server-id: 32a5157c-0471-4c49-b251-2a3bae64733e
+        server-token: 2bb206f7c183a128f784b4a89d1240ec81b8a3bd94a82cc8c42473be4f293a8b
+        client-id: efbc23a0-2704-4b42-9f67-22f83e8aa4d9
+        client-token: efbe6a5c54ed63ea67257718357b8d92e3cfd98931aa781557ddaa74ac2034a3
+
     dashboard:
         engine: dashboard
         endpoints:
             spryker.local:
+
 
 docker:
 
